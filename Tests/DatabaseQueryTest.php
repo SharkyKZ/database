@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests;
 
 use Joomla\Database\ParameterType;
+use Joomla\Database\Query\UnknownTypeException;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -574,11 +575,48 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testCastAsChar()
 	{
-		$this->assertThat(
+		$this->assertEquals(
+			'123',
 			$this->instance->castAsChar('123'),
-			$this->equalTo('123'),
 			'The default castAsChar behaviour is to return the input.'
 		);
+	}
+
+	/**
+	 * Test for the castAs method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\DatabaseQuery::castAs
+	 * @since   1.0
+	 */
+	public function testCastAs()
+	{
+		$this->assertEquals(
+			'123',
+			$this->instance->castAs('CHAR', '123'),
+			'The default castAs behaviour with CHAR is to return the input.'
+		);
+
+		$this->assertEquals(
+			'123',
+			$this->instance->castAs('CHAR', '123', 2),
+			'The default castAs behaviour with CHAR is to return the input.'
+		);
+	}
+
+	/**
+	 * Test for the castAs method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\DatabaseQuery::castAs
+	 * @since   1.0
+	 */
+	public function testCastAsWithUnknownType()
+	{
+		$this->expectException(UnknownTypeException::class);
+		$this->instance->castAs('INT', '123');
 	}
 
 	/**

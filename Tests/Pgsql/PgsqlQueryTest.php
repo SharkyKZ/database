@@ -393,10 +393,41 @@ class PgsqlQueryTest extends TestCase
 	{
 		$q = new PgsqlQuery($this->dbo);
 
-		$this->assertThat(
+		$this->assertEquals(
+			'123::text',
 			$q->castAsChar('123'),
-			$this->equalTo('123::text'),
-			'The default castAsChar behaviour is quote the input.'
+			'The default castAsChar behaviour is quote the input as type text.'
+		);
+	}
+
+	/**
+	 * Test for the castAs method.
+	 *
+	 * @return  void
+	 *
+     * @covers  \Joomla\Database\Pgsql\PgsqlQuery::castAs
+	 * @since   1.0
+	 */
+	public function testCastAs()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertEquals(
+			'123::text',
+            $q->castAs('CHAR', '123'),
+			'The default castAs behaviour with CHAR is to cast the input as text.'
+		);
+
+		$this->assertEquals(
+			'CAST(123 AS CHAR(2))',
+            $q->castAs('CHAR', '123', 2),
+			'When specifying a length and CHAR casting the value should be casted with a length.'
+		);
+
+		$this->assertEquals(
+			'CAST(123 AS INTEGER)',
+            $q->castAs('INT', '123'),
+			'The default castAs behaviour with INT is cast the input.'
 		);
 	}
 

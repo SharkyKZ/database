@@ -108,3 +108,9 @@ The first argument, `$table`, stops accepting the array. Only `DatabaseQuery` ob
 - Argument `$subQueryAlias` has been removed.
 
 Instead of `$query->from($subquery, 'alias')` use `$query->from($subquery->alias('alias'))`.
+
+#### `castAsChar` deprecated. Replaced with `castAs`
+
+`castAsChar($value)` has been deprecated in favour using of the more generic `castAs('CHAR', $value)` method. This
+method has support for supplying the length of a string and also accepting other types of casts such as integers.
+The intent is to add more cast types in the subsequent versions.

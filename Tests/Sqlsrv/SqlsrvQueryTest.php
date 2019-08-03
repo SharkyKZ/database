@@ -620,12 +620,44 @@ class SqlsrvQueryTest extends TestCase
 	{
 		$q = new SqlsrvQuery($this->dbo);
 
-		$this->assertThat(
+		$this->assertEquals(
+			'CAST(123 as NVARCHAR(10))',
 			$q->castAsChar('123'),
-			$this->equalTo('CAST(123 as NVARCHAR(10))'),
 			'The default castAsChar behaviour is quote the input.'
 		);
 	}
+
+	/**
+	 * Test for the castAs method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::castAs
+	 * @since   1.0
+	 */
+	public function testCastAs()
+	{
+		$q = new SqlsrvQuery($this->dbo);
+
+		$this->assertEquals(
+			'CAST(123 as NVARCHAR(10))',
+            $q->castAs('CHAR', '123'),
+			'The default castAs behaviour with CHAR is to cast the input as if it were length 10.'
+		);
+
+		$this->assertEquals(
+			'CAST(123 as NVARCHAR(2))',
+            $q->castAs('CHAR', '123', 2),
+			'When specifying a length and CHAR casting the value should be casted with a length.'
+		);
+
+		$this->assertEquals(
+			'CAST(123 AS INT)',
+            $q->castAs('INT', '123'),
+			'The default castAs behaviour with INT is cast the input.'
+		);
+	}
+
 
 	/**
 	 * Test for the charLength method.

@@ -393,10 +393,42 @@ class MysqlQueryTest extends TestCase
 	{
 		$q = new MysqlQuery($this->dbo);
 
-		$this->assertThat(
+		$this->assertEquals(
+			'123',
 			$q->castAsChar('123'),
-			$this->equalTo('123'),
 			'The default castAsChar behaviour is quote the input.'
+		);
+	}
+
+
+	/**
+	 * Test for the castAs method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Mysql\MysqlQuery::castAs
+	 * @since   1.0
+	 */
+	public function testCastAs()
+	{
+		$q = new MysqlQuery($this->dbo);
+
+		$this->assertEquals(
+			'123',
+			$q->castAs('CHAR', '123'),
+			'The default castAs behaviour with CHAR is to return the input.'
+		);
+
+		$this->assertEquals(
+			'CAST(123 AS CHAR(2))',
+			$q->castAs('CHAR', '123', 2),
+			'When specifying a length and CHAR casting the value should be casted with a length.'
+		);
+
+		$this->assertEquals(
+			'(123 + 0)',
+			$q->castAs('INT', '123'),
+			'The default castAs behaviour with INT is to add 0 to the input.'
 		);
 	}
 
