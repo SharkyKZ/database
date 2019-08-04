@@ -197,7 +197,7 @@ trait MysqlQueryBuilder
 				}
 
 			case 'INT':
-				return '('. $value . ' + 0)';
+				return '(' . $value . ' + 0)';
 		}
 
 		return parent::castAs($type, $value, $length);
